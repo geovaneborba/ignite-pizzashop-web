@@ -8,15 +8,17 @@ import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useMutation } from "@tanstack/react-query"
+import { registerRestaurant } from "@/api/restaurant/register-restaurant"
 
-const signInForm = z.object({
+const signInFormSchema = z.object({
   restaurantName: z.string(),
   managerName: z.string(),
   phone: z.string(),
   email: z.string().email(),
 })
 
-type SignInForm = z.infer<typeof signInForm>
+type SignInFormData = z.infer<typeof signInFormSchema>
 
 export function SignUp() {
   const navigate = useNavigate()
@@ -25,24 +27,31 @@ export function SignUp() {
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm<SignInForm>({
-    resolver: zodResolver(signInForm),
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInFormSchema),
   })
 
-  const handleSignIn = async (data: SignInForm) => {
-    try {
-      console.log(data)
+  const { mutateAsync: registerRestaurantFn } = useMutation({
+    mutationFn: registerRestaurant,
+  })
 
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+  const handleSignUp = async (data: SignInFormData) => {
+    try {
+      await registerRestaurantFn({
+        restaurantName: data.restaurantName,
+        managerName: data.managerName,
+        email: data.email,
+        phone: data.phone,
+      })
 
       toast.success("Restaurante cadastrado com sucesso!", {
         action: {
           label: "Login",
-          onClick: () => navigate("/sign-in"),
+          onClick: () => navigate(`/sign-in?email=${data.email}`),
         },
       })
     } catch (error) {
-      toast.error("Erro ao cadastrar restaurante")
+      toast.error("Erro ao cadastrar restaurante.")
     }
   }
 
@@ -64,9 +73,9 @@ export function SignUp() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4">
+          <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Nome do estabelecimento</Label>
+              <Label htmlFor="restaurantName">Nome do estabelecimento</Label>
               <Input
                 id="restaurantName"
                 type="text"
@@ -75,7 +84,7 @@ export function SignUp() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Seu nome</Label>
+              <Label htmlFor="managerName">Seu nome</Label>
               <Input
                 id="managerName"
                 type="text"
@@ -89,7 +98,7 @@ export function SignUp() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Seu celular</Label>
+              <Label htmlFor="phone">Seu celular</Label>
               <Input id="phone" type="tel" {...register("phone")} />
             </div>
 
