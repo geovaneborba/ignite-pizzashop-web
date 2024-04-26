@@ -2,42 +2,55 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Label } from "@radix-ui/react-label"
 import { Helmet } from "react-helmet-async"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useMutation } from "@tanstack/react-query"
+import { signIn } from "@/api/auth/sign-in"
 
-const signInForm = z.object({
+const signInFormSchema = z.object({
   email: z.string().email(),
 })
 
-type SignInForm = z.infer<typeof signInForm>
+type SignInFormData = z.infer<typeof signInFormSchema>
 
 export function SignIn() {
+  const [searchParams] = useSearchParams()
+
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm<SignInForm>({
-    resolver: zodResolver(signInForm),
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInFormSchema),
+    defaultValues: {
+      email: searchParams.get("email") ?? "",
+    },
   })
 
-  const handleSignIn = async (data: SignInForm) => {
+  const { mutateAsync: signInFn } = useMutation({
+    mutationFn: signIn,
+  })
+
+  const handleSignIn = async (data: SignInFormData) => {
     try {
-      console.log(data)
+      await signInFn({
+        email: data.email,
+      })
 
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      toast.success("Enviamos um link de autenticação para seu e-mail", {
+      toast.success("Enviamos um link de autenticação para seu e-mail.", {
         action: {
-          label: "Reenvier",
+          label: "Reenviar",
           onClick: () => handleSignIn(data),
         },
       })
     } catch (error) {
-      toast.error("Credenciais inválidas")
+      toast.error("Credenciais inválidas.")
     }
   }
 
