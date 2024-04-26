@@ -10,19 +10,8 @@ module.exports = {
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  parserOptions: {
-    sourceType: "module",
-    ecmaVersion: "latest",
-  },
-  plugins: [
-    "react-refresh",
-    "react-hooks",
-    "@typescript-eslint",
-    "simple-import-sort",
-    "prettier",
-  ],
+  plugins: ["react-refresh", "react-hooks", "@typescript-eslint", "prettier"],
   rules: {
-    "simple-import-sort/imports": "error",
     "prettier/prettier": "error",
   },
 }
