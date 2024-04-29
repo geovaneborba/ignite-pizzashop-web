@@ -3,7 +3,6 @@
 <p align="center">
   <img alt="Repo size"  src="https://img.shields.io/github/repo-size/geovaneborba/ignite-pizzashop-web?color=4f46e5&style=for-the-badge">
   <img alt="GitHub top language"  src="https://img.shields.io/github/languages/top/geovaneborba/ignite-pizzashop-web?color=4f46e5&style=for-the-badge"> <img alt="GitHub language count"  src="https://img.shields.io/github/languages/count/geovaneborba/ignite-pizzashop-web?color=4f46e5&style=for-the-badge">
-  <img alt="Licença" src="https://img.shields.io/github/license/geovaneborba/ignite-pizzashop-web?color=4f46e5&style=for-the-badge">
 </p>
 
 <p align="center">
@@ -45,13 +44,15 @@ O projeto contém as seguintes funcionalidades:
 
 ## :books: Aprendizado
 
+Com a construção desta aplicação eu pude aprimorar ainda mais meus conhecimentos em:
+
 - Autenticação JWT
 - Caching e revalidação
 - Conexão com back-end (API)
 - Testes unitários
 - Testes end-to-end
 - Interface Otimista
-- Mock
+- Mocking da API para facilitar o desenvolvimento e testes da aplicação
 
 <p align="right">(<a href="#top">Voltar para o topo</a>)</p>
 
